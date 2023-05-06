@@ -1,12 +1,14 @@
 const express = require("express");
-const feedRoutes = require("./routes/feed");
-const authRoutes = require("./routes/auth");
+// const feedRoutes = require("./routes/feed");
+// const authRoutes = require("./routes/auth");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const path = require("path");
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
-
+const { graphqlHTTP } = require("express-graphql");
+const graphqlSchema = require("./grapghql/schema");
+const graphqlResolver = require("./grapghql/resolvers");
 const {
   DB_USERNAME,
   DB_PASSWORD,
@@ -53,8 +55,17 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 });
-app.use("/feed", feedRoutes);
-app.use("/auth", authRoutes);
+// app.use("/feed", feedRoutes);
+// app.use("/auth", authRoutes);
+
+app.use(
+  "/graphql",
+  graphqlHTTP({
+    schema: graphqlSchema,
+    rootValue: graphqlResolver,
+    graphiql: true,
+  })
+);
 
 app.use((error, req, res, next) => {
   console.log(error);
@@ -69,10 +80,11 @@ const MONGODBURI = `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOSTNAME}.$
 mongoose
   .connect(MONGODBURI)
   .then((result) => {
-    const server = app.listen(`${PORT}`);
-    const io = require("./socket").init(server);
-    io.on("connection", (socket) => {
-      console.log("Client connected");
-    });
+    app.listen(`${PORT}`);
+    // const server = app.listen(`${PORT}`);
+    // const io = require("./socket").init(server);
+    // io.on("connection", (socket) => {
+    //   console.log("Client connected");
+    // });
   })
   .catch((err) => console.log(err));
