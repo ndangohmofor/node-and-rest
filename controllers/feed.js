@@ -7,7 +7,7 @@ const io = require("../socket");
 
 exports.getPosts = async (req, res, next) => {
   const currentPage = req.query.page || 1;
-  const perPage = 10;
+  const perPage = 2;
   // let totalItems;
   // Post.find()
   //   .countDocuments()
@@ -294,7 +294,7 @@ exports.deletePost = async (req, res, next) => {
   }
 };
 
-const clearImage = (filePath) => {
+exports.clearImage = (filePath) => {
   filePath = path.join(__dirname, "..", filePath);
   fs.unlink(filePath, (err) => console.log(err));
 };
