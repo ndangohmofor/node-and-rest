@@ -199,14 +199,17 @@ module.exports = {
       error.code = 422;
       throw error;
     }
+
     post.title = postInput.title;
     post.content = postInput.content;
     if (postInput.imageUrl !== "undefined") {
       post.imageUrl = postInput.imageUrl;
     }
+
     const updatedPost = await post.save();
+
     return {
-      ...this.updatePost._doc,
+      ...updatedPost._doc,
       _id: updatedPost._id.toString(),
       createdAt: updatedPost.createdAt.toISOString(),
       updatedAt: updatedPost.updatedAt.toISOString(),
