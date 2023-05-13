@@ -1,5 +1,5 @@
 const express = require("express");
-const fs = require("fs");
+const { clearImage } = require("./util/clearFile");
 // const feedRoutes = require("./routes/feed");
 // const authRoutes = require("./routes/auth");
 const bodyParser = require("body-parser");
@@ -30,11 +30,6 @@ const fileStorage = multer.diskStorage({
     cb(null, uuidv4());
   },
 });
-
-const clearImage = (filePath) => {
-  filePath = path.join(__dirname, "..", filePath);
-  fs.unlink(filePath, (err) => console.log(err));
-};
 
 const fileFilter = (req, file, cb) => {
   if (

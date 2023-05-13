@@ -119,7 +119,7 @@ exports.createPost = async (req, res, next) => {
     next(err);
   }
 };
-debugger;
+
 exports.getPost = async (req, res, next) => {
   const postId = req.params.postId;
   // Post.findById(postId)
