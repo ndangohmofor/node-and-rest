@@ -1,5 +1,5 @@
 const express = require("express");
-const clearImage = require("./controllers/feed");
+const fs = require("fs");
 // const feedRoutes = require("./routes/feed");
 // const authRoutes = require("./routes/auth");
 const bodyParser = require("body-parser");
@@ -18,6 +18,7 @@ const {
   DB_DOMAINNAME,
   PORT,
 } = require("./config");
+const { error } = require("console");
 
 const app = express();
 
@@ -29,6 +30,11 @@ const fileStorage = multer.diskStorage({
     cb(null, uuidv4());
   },
 });
+
+const clearImage = (filePath) => {
+  filePath = path.join(__dirname, "..", filePath);
+  fs.unlink(filePath, (err) => console.log(err));
+};
 
 const fileFilter = (req, file, cb) => {
   if (
@@ -71,7 +77,11 @@ app.put("/post-image", (req, res, next) => {
     return res.status(200).json({ message: "No file provided!" });
   }
   if (req.body.oldPath) {
-    clearImage(req.body.oldPath);
+    try {
+      clearImage(req.body.oldPath);
+    } catch (error) {
+      console.log(error);
+    }
   }
   return res
     .status(201)
