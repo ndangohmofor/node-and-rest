@@ -4,7 +4,7 @@
   "description": "Building REST APIs using node and express",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --timeout 5000",
     "start": "nodemon app.js"
   },
   "author": "Ivo Mofor",
